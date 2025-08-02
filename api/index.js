@@ -20,6 +20,15 @@ app.use((req, res, next) => {
   next();
 });
 
+// Health check endpoint for Vercel
+app.get('/api/health', (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: 'API is healthy',
+    timestamp: new Date().toISOString()
+  });
+});
+
 // Routes
 app.use('/api/v1', disputeRoutes);
 
@@ -43,6 +52,7 @@ app.use((error, req, res, next) => {
 module.exports = async (req, res) => {
   // Ensure DB connections (no-op if already connected)
   await Promise.all([
+    
     connectMongoDB(),
     connectRedis()
   ]);
